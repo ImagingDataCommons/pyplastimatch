@@ -1,0 +1,9 @@
+dicom2nifti
+scikit-image>=0.14
+numpy
+SimpleITK
+pydicom
+pandas
+nibabel
+matplotlib
+jupyter
