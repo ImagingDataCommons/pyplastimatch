@@ -12,6 +12,7 @@
     
 """
 
+import numpy as np
 import ipywidgets as ipyw
 import matplotlib.pyplot as plt
 
