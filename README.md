@@ -1,6 +1,6 @@
 # PyPlastimatch
 
-Dummy python plastimatch wrapper + other useful functions for exploration etc.
+Dummy python plastimatch wrapper and other useful functions for exploration etc.
 
 [Paolo Zaffino's "official" wrapper](https://gitlab.com/plastimatch/plastimatch/-/tree/master/extra/python).
 
