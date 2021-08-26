@@ -17,9 +17,66 @@ import ipywidgets as ipyw
 import matplotlib.pyplot as plt
 
 
+class AxialSliceComparison:
+  """ 
+  class description goes here
+  
+  """
+  
+  def __init__(self, ct_volume_left, ct_volume_right, ct_cmap = "gray", figsize = (12, 12), dpi = 100):
+    
+    # the only constraint should be on the number of axial slice of the volumes to visualise
+    assert ct_volume_left.shape[0] == ct_volume_right.shape[0]
+    
+    self.ct_volume_left = ct_volume_left
+    self.ct_volume_right = ct_volume_right
+
+    self.figsize = figsize
+    self.dpi = dpi
+    
+    self.ct_cmap = ct_cmap
+
+    ipyw.interact(self.views)
+  
+  
+  def views(self):
+    """ 
+    method description goes here
+    
+    """
+    
+    max_axial = self.ct_volume.shape[0] - 1
+
+    ipyw.interact(self.plot_slice, 
+                  axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
+                                             step = 1, continuous_update = True,
+                                             description = 'Axial slice:'), 
+                  )
+
+  def plot_slice(self, axial_idx):
+    """ 
+    method description goes here
+    
+    """
+
+    fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize = self.figsize, dpi = self.dpi)
+
+    # plot CT axial slices
+    ax_left.set_title("nnU-Net")
+    ax_left.imshow(self.ct_volume_left[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    
+    ax_right.set_title("Manual")
+    ax_right.imshow(self.ct_volume_right[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+
+    plt.subplots_adjust(hspace = 0.2)
+  
+
+## ----------------------------------------
+## ----------------------------------------
+
 class AxialSliceSegmaskComparison:
   """ 
-  description goes here
+  class description goes here
   
   """
   
@@ -39,12 +96,13 @@ class AxialSliceSegmaskComparison:
     self.segmask_cmap_dict = segmask_cmap_dict
     self.segmask_alpha = segmask_alpha
     
-    self.v = [np.min(ct_volume), np.max(ct_volume)]
-
-    # Call to select slice plane
     ipyw.interact(self.views)
   
   def views(self):
+    """ 
+    method description goes here
+    
+    """
     max_axial = self.ct_volume.shape[0] - 1
 
     ipyw.interact(self.plot_slice, 
@@ -54,6 +112,10 @@ class AxialSliceSegmaskComparison:
                   )
 
   def plot_slice(self, axial_idx):
+    """
+    method description goes here
+    
+    """
 
     fig, (ax_ai, ax_manual) = plt.subplots(1, 2, figsize = self.figsize, dpi = self.dpi)
 
