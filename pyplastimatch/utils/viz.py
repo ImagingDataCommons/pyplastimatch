@@ -45,7 +45,7 @@ class AxialSliceComparison:
     
     """
     
-    max_axial = self.ct_volume.shape[0] - 1
+    max_axial = self.ct_volume_left.shape[0] - 1
 
     ipyw.interact(self.plot_slice, 
                   axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
