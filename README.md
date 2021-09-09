@@ -1,8 +1,8 @@
 # PyPlastimatch
 
-Dummy python plastimatch wrapper and other useful functions for exploration etc.
+**WORK IN PROGRESS** - dummy python plastimatch wrapper and other useful functions for exploration etc.
 
-[Paolo Zaffino's "official" wrapper](https://gitlab.com/plastimatch/plastimatch/-/tree/master/extra/python).
+[Paolo Zaffino's (un)"official" wrapper](https://gitlab.com/plastimatch/plastimatch/-/tree/master/extra/python).
 
 
 ## Install Dependencies
