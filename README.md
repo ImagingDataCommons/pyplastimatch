@@ -4,6 +4,7 @@
 
 [Paolo Zaffino's (un)"official" wrapper](https://gitlab.com/plastimatch/plastimatch/-/tree/master/extra/python).
 
+Further discussion about the python-wrapping of Plastimatch can be found at [this discourse.slicer thread](https://discourse.slicer.org/t/python-wrapping-of-plastimatch/6722/10).
 
 ## Install Dependencies
 
