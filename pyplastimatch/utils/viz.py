@@ -145,3 +145,112 @@ class AxialSliceSegmaskComparison:
 
     plt.subplots_adjust(hspace = 0.2)
 
+## ----------------------------------------
+## ----------------------------------------
+
+class AxialSliceSegmaskViz:
+  """ 
+  class description goes here
+  
+  """
+  
+  def __init__(self, ct_volume, segmask_dict, segmask_cmap_dict,
+               segmask_alpha = 0.4, ct_cmap = "gray",
+               random_cmap = False, # FIXME - legend in the figure is wrong
+               fig_title = "", figsize = (8, 8), dpi = 100):
+    
+    """ 
+    constructor description goes here
+    
+    """
+
+    self.ct_volume = ct_volume
+    
+    self.segmask_dict = segmask_dict
+
+    self.fig_title = fig_title
+    self.figsize = figsize
+    self.dpi = dpi
+    
+    self.ct_cmap = ct_cmap
+    
+    if random_cmap:
+      self.segmask_cmap_dict = self.get_random_cmap_dict(segmask_dict.keys())
+    else:
+      self.segmask_cmap_dict = segmask_cmap_dict
+
+    self.segmask_alpha = segmask_alpha
+    
+    ipyw.interact(self.views)
+  
+  def get_random_cmap_dict(self, dict_keys):
+    """ 
+    method description goes here
+    
+    """
+
+    segmask_cmap_dict = dict()
+
+    for idx, key in enumerate(dict_keys):
+      # dummy random colormap creation
+      vals = np.linspace(0, 1, 256)
+      np.random.shuffle(vals)
+
+      # color map to sample from
+      my_cmap = plt.cm.jet(vals)
+      my_cmap[:, -1] = np.linspace(0, 1, 256)
+
+      segmask_cmap_dict[key] = ListedColormap(my_cmap)
+
+    return segmask_cmap_dict
+
+  def views(self):
+    """ 
+    method description goes here
+    
+    """
+    max_axial = self.ct_volume.shape[0] - 1
+
+    ipyw.interact(self.plot_slice, 
+                  axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
+                                             step = 1, continuous_update = True,
+                                             description = 'Axial slice:'), 
+                  )
+
+  def plot_slice(self, axial_idx):
+    """
+    method description goes here
+    
+    """
+
+    fig, ax = plt.subplots(1, 1, figsize = self.figsize, dpi = self.dpi)
+
+    try:
+      len(legend_elements)
+    except:
+      legend_elements = list()
+
+    # plot CT axial slices
+    ax.set_title(self.fig_title)
+    ax.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+
+    # check the lenght of cmaps is enough to colour all the structures
+    assert len(self.segmask_cmap_dict) == len(self.segmask_dict)
+    
+    # plot overlaying masks
+    for key in self.segmask_dict:
+      segmask = self.segmask_dict[key]
+      segmask_cmap = self.segmask_cmap_dict[key]
+
+      ax.imshow(segmask[axial_idx, :, :], label = key,
+                cmap = segmask_cmap, alpha = self.segmask_alpha)
+      
+      if not len(legend_elements) == len(segmask_dict):        
+        legend_elements.append(Patch(facecolor = segmask_cmap(0.7),
+                                     edgecolor = 'k',
+                                     label = key))
+      
+    plt.subplots_adjust(hspace = 0.2)
+    ax.legend(handles = legend_elements,
+              loc = 'upper left',
+              bbox_to_anchor = (1, 1))
