@@ -245,7 +245,7 @@ class AxialSliceSegmaskViz:
       ax.imshow(segmask[axial_idx, :, :], label = key,
                 cmap = segmask_cmap, alpha = self.segmask_alpha)
       
-      if not len(legend_elements) == len(segmask_dict):        
+      if not len(legend_elements) == len(self.segmask_dict):        
         legend_elements.append(Patch(facecolor = segmask_cmap(0.7),
                                      edgecolor = 'k',
                                      label = key))
