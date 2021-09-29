@@ -16,6 +16,8 @@ import numpy as np
 import ipywidgets as ipyw
 import matplotlib.pyplot as plt
 
+from matplotlib.colors import ListedColormap
+from matplotlib.patches import Patch
 
 class AxialSliceComparison:
   """ 
