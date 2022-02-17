@@ -19,41 +19,69 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
 
-class AxialSliceComparison:
+class AxialSliceFigure:
   """ 
-  class description goes here
+  Base class for the interactive slice-wise visualisation widgets
   
+  Init of all the figure parameters that are always set.
+
+  @Params:
+    ct_cmap - required : colormap for the CT viz. 
+    figsize - required : size of the figure (in inches).
+    dpi     - required : DPI of the figure.
+    min_hu  - required : minimum HU to be visualised
+    max_hu  - required : maximum HU to be visualised
   """
   
-  def __init__(self, ct_volume_left, ct_volume_right, ct_cmap = "gray", figsize = (12, 12), dpi = 100):
-    
-    # the only constraint should be on the number of axial slice of the volumes to visualise
-    assert ct_volume_left.shape[0] == ct_volume_right.shape[0]
-    
-    self.ct_volume_left = ct_volume_left
-    self.ct_volume_right = ct_volume_right
+  def __init__(self, ct_cmap, figsize, dpi, min_hu, max_hu):
 
+    self.ct_cmap = ct_cmap
     self.figsize = figsize
     self.dpi = dpi
-    
-    self.ct_cmap = ct_cmap
 
-    ipyw.interact(self.views)
-  
-  
+    self.min_hu = min_hu
+    self.max_hu = max_hu
+
+
   def views(self):
     """ 
     method description goes here
     
     """
-    
-    max_axial = self.ct_volume_left.shape[0] - 1
 
     ipyw.interact(self.plot_slice, 
-                  axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
+                  axial_idx = ipyw.IntSlider(min = 0, max = self.max_axial,
                                              step = 1, continuous_update = True,
-                                             description = 'Axial slice:'), 
-                  )
+                                             description = 'Axial slice:'))
+
+## ----------------------------------------
+## ----------------------------------------
+
+class AxialSliceComparison(AxialSliceFigure):
+  """ 
+  class description goes here
+  
+  """
+  
+  def __init__(self, ct_volume_left, ct_volume_right,
+               title_left = "", title_right = "",
+               ct_cmap = "gray", figsize = (12, 12), dpi = 100,
+               min_hu = -1024, max_hu = 3072):
+    
+    super().__init__(ct_cmap, figsize, dpi, min_hu, max_hu)
+
+    # the only constraint should be on the number of axial slice of the volumes to visualise
+    assert ct_volume_left.shape[0] == ct_volume_right.shape[0]
+
+    self.ct_volume_left = ct_volume_left
+    self.ct_volume_right = ct_volume_right
+    self.max_axial = self.ct_volume_left.shape[0] - 1
+   
+    self.title_left = title_left
+    self.title_right = title_right
+
+    ipyw.interact(self.views)
+  
 
   def plot_slice(self, axial_idx):
     """ 
@@ -64,11 +92,13 @@ class AxialSliceComparison:
     fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize = self.figsize, dpi = self.dpi)
 
     # plot CT axial slices
-    ax_left.set_title("nnU-Net")
-    ax_left.imshow(self.ct_volume_left[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    ax_left.set_title(self.title_left)
+    ax_left.imshow(self.ct_volume_left[axial_idx, :, :], cmap = self.ct_cmap,
+                   vmin = self.min_hu, vmax = self.max_hu)
     
-    ax_right.set_title("Manual")
-    ax_right.imshow(self.ct_volume_right[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    ax_right.set_title(self.title_right)
+    ax_right.imshow(self.ct_volume_right[axial_idx, :, :], cmap = self.ct_cmap,
+                    vmin = self.min_hu, vmax = self.max_hu)
 
     plt.subplots_adjust(hspace = 0.2)
   
@@ -76,42 +106,33 @@ class AxialSliceComparison:
 ## ----------------------------------------
 ## ----------------------------------------
 
-class AxialSliceSegmaskComparison:
+class AxialSliceSegmaskComparison(AxialSliceFigure):
   """ 
   class description goes here
   
   """
   
   def __init__(self, ct_volume, segmask_ai_dict, segmask_manual_dict,
-               segmask_cmap_dict, segmask_alpha = 0.6, ct_cmap = "gray",
-               figsize = (12, 12), dpi = 100):
+               segmask_cmap_dict, segmask_alpha = 0.6, title_left = "", title_right = "",
+               ct_cmap = "gray", figsize = (12, 12), dpi = 100,
+               min_hu = -1024, max_hu = 3072):
     
+    super().__init__(ct_cmap, figsize, dpi, min_hu, max_hu)
+
     self.ct_volume = ct_volume
-    
+    self.max_axial = self.ct_volume.shape[0] - 1
+
     self.segmask_ai_dict = segmask_ai_dict
     self.segmask_manual_dict = segmask_manual_dict
 
-    self.figsize = figsize
-    self.dpi = dpi
-    
-    self.ct_cmap = ct_cmap
     self.segmask_cmap_dict = segmask_cmap_dict
     self.segmask_alpha = segmask_alpha
     
-    ipyw.interact(self.views)
-  
-  def views(self):
-    """ 
-    method description goes here
-    
-    """
-    max_axial = self.ct_volume.shape[0] - 1
+    self.title_left = title_left
+    self.title_right = title_right
 
-    ipyw.interact(self.plot_slice, 
-                  axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
-                                             step = 1, continuous_update = True,
-                                             description = 'Axial slice:'), 
-                  )
+    ipyw.interact(self.views)
+
 
   def plot_slice(self, axial_idx):
     """
@@ -122,11 +143,13 @@ class AxialSliceSegmaskComparison:
     fig, (ax_ai, ax_manual) = plt.subplots(1, 2, figsize = self.figsize, dpi = self.dpi)
 
     # plot CT axial slices
-    ax_ai.set_title("nnU-Net")
-    ax_ai.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    ax_ai.set_title(self.title_left)
+    ax_ai.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap,
+                 vmin = self.min_hu, vmax = self.max_hu)
     
-    ax_manual.set_title("Manual")
-    ax_manual.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    ax_manual.set_title(self.title_right)
+    ax_manual.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap,
+                     vmin = self.min_hu, vmax = self.max_hu)
 
     # check the lenght of cmaps is enough to colour all the structures
     assert len(self.segmask_cmap_dict) == np.max([len(self.segmask_ai_dict),
@@ -150,31 +173,32 @@ class AxialSliceSegmaskComparison:
 ## ----------------------------------------
 ## ----------------------------------------
 
-class AxialSliceSegmaskViz:
+class AxialSliceSegmaskViz(AxialSliceFigure):
   """ 
   class description goes here
   
   """
   
   def __init__(self, ct_volume, segmask_dict, segmask_cmap_dict,
-               segmask_alpha = 0.4, ct_cmap = "gray",
+               segmask_alpha = 0.4,
                random_cmap = False, # FIXME - legend in the figure is wrong
-               fig_title = "", figsize = (8, 8), dpi = 100):
+               fig_title = "",
+               ct_cmap = "gray", figsize = (6, 6), dpi = 100,
+               min_hu = -1024, max_hu = 3072):
     
     """ 
     constructor description goes here
     
     """
+    
+    super().__init__(ct_cmap, figsize, dpi, min_hu, max_hu)
 
     self.ct_volume = ct_volume
-    
+    self.max_axial = self.ct_volume.shape[0] - 1
+
     self.segmask_dict = segmask_dict
 
     self.fig_title = fig_title
-    self.figsize = figsize
-    self.dpi = dpi
-    
-    self.ct_cmap = ct_cmap
     
     if random_cmap:
       self.segmask_cmap_dict = self.get_random_cmap_dict(segmask_dict.keys())
@@ -185,6 +209,7 @@ class AxialSliceSegmaskViz:
     
     ipyw.interact(self.views)
   
+
   def get_random_cmap_dict(self, dict_keys):
     """ 
     method description goes here
@@ -206,18 +231,6 @@ class AxialSliceSegmaskViz:
 
     return segmask_cmap_dict
 
-  def views(self):
-    """ 
-    method description goes here
-    
-    """
-    max_axial = self.ct_volume.shape[0] - 1
-
-    ipyw.interact(self.plot_slice, 
-                  axial_idx = ipyw.IntSlider(min = 0, max = max_axial,
-                                             step = 1, continuous_update = True,
-                                             description = 'Axial slice:'), 
-                  )
 
   def plot_slice(self, axial_idx):
     """
@@ -234,7 +247,8 @@ class AxialSliceSegmaskViz:
 
     # plot CT axial slices
     ax.set_title(self.fig_title)
-    ax.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap, vmin = -1024, vmax = 1024)
+    ax.imshow(self.ct_volume[axial_idx, :, :], cmap = self.ct_cmap,
+              vmin = self.min_hu, vmax = self.max_hu)
 
     # check the lenght of cmaps is enough to colour all the structures
     assert len(self.segmask_cmap_dict) == len(self.segmask_dict)
