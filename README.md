@@ -1,6 +1,6 @@
 # PyPlastimatch
 
-**WORK IN PROGRESS** - dummy python plastimatch wrapper and other useful functions for exploration etc.
+**WORK IN PROGRESS** - dummy python plastimatch wrapper and other useful functions for exploration.
 
 
 # Table of Contents
