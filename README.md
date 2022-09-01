@@ -1,7 +1,10 @@
 # PyPlastimatch
 
-**WORK IN PROGRESS** - dummy python plastimatch wrapper and other useful functions for exploration.
+PyPlastimatch is a python wrapper for [Plastimatch](http://plastimatch.org/), an ITK-based open source software designed for volumetric medical image processing and radiation therapy applications.
 
+The main reason behing the development of PyPlastimatch is being able to use the Plastimatch functions within python scripts without having to code using `os.system` or `subprocess` all the time. Also, we are working on making the output of some of the functions Plastimatch implements for evaluation (e.g., Dice Coefficient and Hausdorff Distance) more pythonic/easily usable in python-based data analysis pipelines.
+
+Together with the wrapping functions, we are also developing simple but handy functions that can be used for quick data exploration (e.g., simple widgets based on ipywidgets) in ipython notebooks and JupyterLab.
 
 # Table of Contents
 - [Dependencies](#dependencies)
@@ -9,21 +12,42 @@
 - [Further Reading](#further-reading)
 
 
+# Install Via `pip`
+
+PyPlastimatch can be installed via pip:
+
+```
+pip install pyplastimatch
+```
+
 # Dependencies
 
-In order to run the code found in this repository, all the python libraries found in `requirements.txt` must be installed. This can be achieved running the command:
+## Python
+
+If you decide to clone the PyPlastimatch repository and not to install it with `pip`, in order to run the code as intended, all the python libraries found in `requirements.txt` must be installed. This can be done running the command:
 
 ```
 pip3 install -r requirements.txt
 ```
 
-In addition, you will need to download [plastimatch](http://plastimatch.org/) by running:
+## Plastimatch
+
+Since PyPlastimatch is a python wrapper and doesn't include any processing code, Plastimatch must be installed on the machine separately.
+
+For Linux users, Plastimatch can be installed simply by running:
 
 ```
 sudo apt install plastimatch
 ```
 
-and the DICOM for [Quantitative Imaging (dcmqi) library](https://github.com/QIICR/dcmqi) (e.g., under Linux, download the latest release, move the content of the `bin` folder under `usr/local/bin`, and make the files executable).
+For Windows users, Plastimatch can be installed following [the guide at this webpage](http://plastimatch.org/windows_installation.html).
+
+Plastimatch can also be build from source following [the guide at this webpage](http://plastimatch.org/building_plastimatch.html).
+
+
+## DCMQI
+
+Some functions might be based on the [DICOM for Quantitative Imaging (dcmqi) library](https://github.com/QIICR/dcmqi), that must be installed separately (e.g., under Linux, download the latest release, move the content of the `bin` folder under `usr/local/bin`, and make the files executable).
 
 
 # Usage Example
