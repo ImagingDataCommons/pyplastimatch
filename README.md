@@ -6,6 +6,11 @@ The main reason behing the development of PyPlastimatch is being able to use the
 
 Together with the wrapping functions, we are also developing simple but handy functions that can be used for quick data exploration (e.g., simple widgets based on ipywidgets) in ipython notebooks and JupyterLab.
 
+<br>
+
+PyPlastimatch is completely independent from the Plastimatch development, and it is being developed mainly for internal use. For this reason, most of the Plastimatch functions might be missing. If you would like to see something added or point out how we could improve anything in the wrapper, you are very welcome to [open an issue at the issue page](https://github.com/AIM-Harvard/pyplastimatch/issues).
+
+
 # Table of Contents
 - [Install Via pip](#install-via-pip)
 - [Dependencies](#dependencies)
@@ -48,7 +53,6 @@ For Windows users, Plastimatch can be installed following [the guide at this web
 
 Plastimatch can also be build from source following [the guide at this webpage](http://plastimatch.org/building_plastimatch.html).
 
-
 ## DCMQI
 
 Some functions might be based on the [DICOM for Quantitative Imaging (dcmqi) library](https://github.com/QIICR/dcmqi), that must be installed separately (e.g., under Linux, download the latest release, move the content of the `bin` folder under `usr/local/bin`, and make the files executable).
@@ -63,6 +67,7 @@ For instance, the "Cohort Preparation" Colab notebook contains a simple tutorial
 To open the Colab notebook, click here:  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ImagingDataCommons/IDC-Examples/blob/master/notebooks/cohort_preparation.ipynb) 
 
 Note: provided you have a Google Cloud Platform project correctly setup, you will be able to run this and all the other notebooks for free, completely on the cloud.
+
 
 # Further Reading
 [Paolo Zaffino's (un)"official" wrapper](https://gitlab.com/plastimatch/plastimatch/-/tree/master/extra/python).
