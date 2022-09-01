@@ -7,7 +7,11 @@ The main reason behing the development of PyPlastimatch is being able to use the
 Together with the wrapping functions, we are also developing simple but handy functions that can be used for quick data exploration (e.g., simple widgets based on ipywidgets) in ipython notebooks and JupyterLab.
 
 # Table of Contents
+- [Install Via pip](#install-via-pip)
 - [Dependencies](#dependencies)
+  - [Python](#python)
+  - [Plastimatch](#plastimatch)
+  - [dcmqi](#dcmqi)
 - [Usage Example](#usage-example)
 - [Further Reading](#further-reading)
 
