@@ -8,7 +8,7 @@ Together with the wrapping functions, we are also developing simple but handy fu
 
 <br>
 
-PyPlastimatch is completely independent from the Plastimatch development, and it is being developed mainly for internal use. For this reason, most of the Plastimatch functions might be missing. If you would like to see something added or point out how we could improve anything in the wrapper, you are very welcome to [open an issue at the issue page](https://github.com/AIM-Harvard/pyplastimatch/issues).
+PyPlastimatch is completely independent from the main software Plastimatch, and it is being developed mainly for internal use. For this reason, most of the Plastimatch functions might be missing. If you would like to see something added or point out how we could improve anything in the wrapper, you are very welcome to [open an issue at the issue page](https://github.com/AIM-Harvard/pyplastimatch/issues).
 
 
 # Table of Contents
