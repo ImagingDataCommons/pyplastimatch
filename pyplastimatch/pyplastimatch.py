@@ -24,7 +24,7 @@ import subprocess
 # and pass it also the command we want to run (convert, resample, etc.)
 
 
-def convert(verbose = True, path_to_log_file = None, return_bash_command = False, **kwargs):
+def convert(command_args, verbose = True, path_to_log_file = None, return_bash_command = False):
   """
   Convert DICOM series to any supported file format.
   
@@ -32,23 +32,23 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
   https://plastimatch.org/plastimatch.html#plastimatch-convert
   
   Args:
+      command_args: dictionary of the arguments parsable by 'plastimatch convert' that you want to use
+  
       (GENERAL)
       path_to_log_file: path to file where stdout and stderr from the processing should be logged
       return_bash_command: return the executed command together with the exit status
-      
-      **kwargs: all the arguments parsable by 'plastimatch convert'
       
   """
 
   bash_command = list()
   bash_command += ["plastimatch", "convert"]
   
-  for key, val in kwargs.items():
+  for key, val in command_args.items():
     bash_command += ["--%s"%(key), val]
   
   if verbose:
     print("\nRunning 'plastimatch convert' with the specified arguments:")
-    for key, val in kwargs.items():
+    for key, val in command_args.items():
       print("  --%s"%(key), val)
   
   try:
