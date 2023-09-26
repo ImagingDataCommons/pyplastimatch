@@ -56,7 +56,7 @@ def get_distro_info():
 
 ## --------------------------------
 
-def install_binaries(binaries_path: str) -> None:
+def move_binaries(binaries_path: str, verbose: bool) -> None:
 
   # copy the binaries to the right folder
   print("\nInstalling binaries...", end="")
@@ -68,18 +68,41 @@ def install_binaries(binaries_path: str) -> None:
 
   # install dependencies
   print("Installing dependencies...", end="")
-  install_dependencies()
+  sys.stdout.flush()
+  install_dependencies(verbose=verbose)
   print(" Done.")
   
 ## --------------------------------
 
-def install_dependencies() -> None:
-  subprocess.run(["apt-get", "update"])
-  subprocess.run(["apt-get", "install", "-y", "libinsighttoolkit4-dev", "libdcmtk16", "libdlib19", "libfftw3-dev"])
+def install_dependencies(verbose: bool) -> None:
+
+  apt_update = ["apt-get", "update"]
+  
+  if verbose:
+    subprocess.run(apt_update, capture_output=verbose, check=True)
+  else:
+    subprocess.run(
+      apt_update,
+      stdout=subprocess.DEVNULL,
+      stderr=subprocess.STDOUT
+      )
+    
+
+  dependency_list = ["libinsighttoolkit4-dev", "libdcmtk16", "libdlib19", "libfftw3-dev"]
+  apt_install = ["apt-get", "install", "-y"] + dependency_list
+  
+  if verbose:
+    subprocess.run(apt_install, capture_output=verbose, check=True)
+  else:
+    subprocess.run(
+      apt_install,
+      stdout=subprocess.DEVNULL,
+      stderr=subprocess.STDOUT
+      )
 
 ## --------------------------------
 
-def download_binaries() -> str:
+def install_compiled_binaries(verbose: bool=False) -> None:
   """
   Download the plastimatch binaries compiled for the specified distribution (if found).
   
@@ -96,17 +119,50 @@ def download_binaries() -> str:
   distro_name = distro_info_dict["name"]
   distro_version_id = distro_info_dict["version_id"]
 
-  # to check if the distribution is supported, check the build_release.json file in the repo
-  # read the build_release.json file from the utils directory
-  build_release_path = os.path.join(os.path.dirname(__file__), "build_release.json")
-  with open(build_release_path, "r") as f:
+  print("PyPlastimatch Plastimatch installation utility.")
+  print("NOTE: this utility is not meant to be replace the normal install of Plastimatch via apt.")
+  print("Rather, it is meant to be used in case a Plastimatch binary is not available for a specific distribution.")
+  print("\nSystem distribution: %s %s"%(distro_name, distro_version_id))
+
+  releases_url = "https://api.github.com/repos/AIM-Harvard/pyplastimatch/releases"
+  releases_dict = requests.get(releases_url).json()
+
+  # request temp dir for the pull of the github release
+  # (the directory will be deleted at upon exit from the function)
+  temp_dir = tempfile.TemporaryDirectory()
+
+  # get the latest release
+  for release in releases_dict:
+    release["tag_name"] == "latest"
+    latest_release_dict = release
+
+  # get the list of files in the release
+  assets_list = latest_release_dict["assets"]
+
+  # to check if the distribution is supported, check the release_meta.json file in the release
+  meta_asset_name = "release_meta.json"
+
+  # look for the release_meta.json file
+  for asset in assets_list:
+    if asset["name"] == meta_asset_name:
+      meta_asset = asset
+      break
+
+  # download the file
+  meta_browser_download_url = meta_asset["browser_download_url"]
+  path_to_meta_json = os.path.join(temp_dir.name, meta_asset_name)
+
+  print("\nDownloading meta JSON in the temp directory %s..."%path_to_meta_json, end="")
+  print(" Done.")
+  
+  urllib.request.urlretrieve(meta_browser_download_url, path_to_meta_json)
+
+  with open(path_to_meta_json, "r") as f:
     build_release_dict = json.load(f)
   
-  print("System distribution: %s %s"%(distro_name, distro_version_id))
-
+  # check if the distribution is supported
   supported = False
 
-  # check if the distribution is supported
   for supported_distro_key in build_release_dict.keys():
     supported_distro = build_release_dict[supported_distro_key]
     if distro_name == supported_distro["name"] and \
@@ -120,17 +176,6 @@ def download_binaries() -> str:
   else:
     print("You system does not have a compiled binary in the latest PyPlastimatch release.")
 
-  releases_url = "https://api.github.com/repos/AIM-Harvard/pyplastimatch/releases"
-  releases_dict = requests.get(releases_url).json()
-
-  # get the latest release
-  for release in releases_dict:
-    release["tag_name"] == "latest"
-    latest_release_dict = release
-
-  # look for the right asset
-  assets_list = latest_release_dict["assets"]
-  
   # the asset name is always going to be formatted as "plastimatch-$OS_${MAJOR_VERSION}_${MINOR_VERSION}"
   distro_asset_name = "plastimatch-%s_%s_%s"%(
     distro_name.lower(),
@@ -145,17 +190,13 @@ def download_binaries() -> str:
   
   # download the asset
   browser_download_url = distro_asset["browser_download_url"]
+  path_to_binaries = os.path.join(temp_dir.name, distro_asset_name)
   
-  temp_dir = tempfile.TemporaryDirectory()
-  filename = os.path.join(temp_dir.name, distro_asset_name)
-  
-  print("\nDownloading binary in the temp directory %s..."%filename, end="")
+  print("\nDownloading binary in the temp directory %s..."%path_to_binaries, end="")
   print(" Done.")
   
-  urllib.request.urlretrieve(browser_download_url, filename)
-
-  install_binaries(filename)
+  urllib.request.urlretrieve(browser_download_url, path_to_binaries)
+  
+  move_binaries(path_to_binaries, verbose=verbose)
 
   temp_dir.cleanup()
-
-  return None

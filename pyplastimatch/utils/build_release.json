@@ -1,7 +1,0 @@
-{
-  "Ubuntu 22.04" : {
-    "name" : "Ubuntu",
-    "version_id": "22.04",
-    "release_filename" : "plastimatch-ubuntu_22_04"
-  }
-}
