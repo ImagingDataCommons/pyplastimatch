@@ -1,7 +1,8 @@
-scikit-image
-numpy
-SimpleITK
-pydicom
-pandas
+itk
 matplotlib
+numpy
+pandas
+pydicom
 requests
+scikit-image
+SimpleITK
