@@ -102,7 +102,7 @@ def install_dependencies(verbose: bool) -> None:
 
 ## --------------------------------
 
-def install_compiled_binaries(verbose: bool=False) -> None:
+def install_precompiled_binaries(verbose: bool=False) -> None:
   """
   Download the plastimatch binaries compiled for the specified distribution (if found).
   
