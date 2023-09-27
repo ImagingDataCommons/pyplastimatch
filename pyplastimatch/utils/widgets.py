@@ -101,6 +101,7 @@ class AxialSliceComparison(AxialSliceFigure):
                     vmin = self.min_hu, vmax = self.max_hu)
 
     plt.subplots_adjust(hspace = 0.2)
+    plt.show()
   
 
 ## ----------------------------------------
@@ -169,6 +170,7 @@ class AxialSliceSegmaskComparison(AxialSliceFigure):
                        cmap = segmask_cmap, alpha = self.segmask_alpha)
 
     plt.subplots_adjust(hspace = 0.2)
+    plt.show()
 
 ## ----------------------------------------
 ## ----------------------------------------
@@ -267,6 +269,8 @@ class AxialSliceSegmaskViz(AxialSliceFigure):
                                      label = key))
       
     plt.subplots_adjust(hspace = 0.2)
+    plt.show()
+
     ax.legend(handles = legend_elements,
               loc = 'upper left',
               bbox_to_anchor = (1, 1))
