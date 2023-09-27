@@ -18,6 +18,7 @@ PyPlastimatch is completely independent from the main software Plastimatch, and 
   - [Plastimatch](#plastimatch)
   - [dcmqi](#dcmqi)
 - [Usage Example](#usage-example)
+- [Run in a Docker Container](#ubuntu-2204-lts-plastimatch-docker-container)
 - [Further Reading](#further-reading)
 
 
@@ -43,15 +44,40 @@ pip3 install -r requirements.txt
 
 Since PyPlastimatch is a python wrapper and doesn't include any processing code, Plastimatch must be installed on the machine separately.
 
-For Linux users, Plastimatch can be installed simply by running:
+### Ubuntu 20.04 LTS
+
+For users running Ubuntu 20.04 LTS (and distributions that fetch the same packages), Plastimatch can be installed simply by running:
 
 ```
 sudo apt install plastimatch
 ```
 
+### Ubuntu 22.04 LTS
+
+Users running Ubuntu 22.04 LTS will unfortunately not be able to install Plastimatch via `apt` (see [this Issue on the official Plastimatch GitLab](https://gitlab.com/plastimatch/plastimatch/-/issues/87)). To remedy this, we compiled a binary file for Ubuntu 22.04 LTS that you can find [in our releases](https://github.com/AIM-Harvard/pyplastimatch/releases) and you can download running the following once PyPlastimatch is installed (from a Python3 shell):
+
+```
+from pyplastimatch.utils.install import install_precompiled_binaries
+install_precompiled_binaries()
+```
+
+and, of course, its equivalent from CLI:
+
+```
+RUN python3 -c 'from pyplastimatch.utils.install import install_precompiled_binaries; install_precompiled_binaries()'
+```
+
+The plastimatch binary we provide was compiled dinamically, so it will not work without installing some dependencies (`itk` via `pip`, and some system dependencies that the `install_precompiled_binaries()` function takes care of automatically). Depending on the python version you are using and your environment (i.e., packages already installed), you might need to install `itk` via `pip` before installing `pyplastimatch`.
+
+In the future, we might support binaries pre-compiled statically, and for other distributions/OSs. 
+
+### Other OSs
+
 For Windows users, Plastimatch can be installed following [the guide at this webpage](http://plastimatch.org/windows_installation.html).
 
-Plastimatch can also be build from source following [the guide at this webpage](http://plastimatch.org/building_plastimatch.html).
+### Building from Source
+
+Plastimatch can also be build from source following [the guide at this webpage](http://plastimatch.org/building_plastimatch.html). The guide could be slightly outdated, but it should be enough to get you started.
 
 ## DCMQI
 
@@ -67,6 +93,44 @@ For instance, the "Cohort Preparation" Colab notebook contains a simple tutorial
 To open the Colab notebook, click here:  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ImagingDataCommons/IDC-Examples/blob/master/notebooks/cohort_preparation.ipynb) 
 
 Note: provided you have a Google Cloud Platform project correctly setup, you will be able to run this and all the other notebooks for free, completely on the cloud.
+
+# Ubuntu 22.04 LTS Plastimatch Docker Container
+
+If you want to test Plastimatch for Ubuntu 22.04 LTS, you can use the Docker image we shared for this purpose under `dockerfiles`.
+
+## Build the Docker Container
+
+To build the Ubuntu 22.04 LTS Platimatch Docker container, run the following commands from the root of the PyPlastimatch repository:
+
+```
+cd dockerfiles/
+
+docker build --tag pypla_22.04 .
+```
+
+## Run the Docker Container
+
+Assuming the data you want to convert/manipulate with Plastimatch is stored at `/home/dennis/Desktop/sample_data/`, the Docker command to run will look like the following
+
+```
+docker run --rm -it --entrypoint bash -v /home/dennis/Desktop/sample_data/:/app/data pypla_22.04
+```
+
+This will mount the data directory to the container's `/app/data` directory, and you can then run Plastimatch commands from within the container. For example, if `/home/dennis/Desktop/sample_data/` is structured as follows:
+
+```
+(base) dennis@W2-S1:~$ tree /home/dennis/Desktop/sample_data/ -L 1
+/home/dennis/Desktop/sample_data/
+└── dicom
+```
+
+Then, once inside the container, you can run the following command to convert the DICOM files to a volume saved in the NRRD format:
+
+```
+cd /app/data
+
+plastimatch convert --input input_dcm/ --output-img test.nrrd
+```
 
 
 # Further Reading

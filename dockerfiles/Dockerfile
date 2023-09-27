@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --no-cache-dir numpy SimpleITK pandas requests itk
+RUN pip3 install --no-cache-dir numpy SimpleITK pandas requests itk matplotlib pydicom scikit-image
 
-RUN pip install git+https://github.com/AIM-Harvard/pyplastimatch.git@bin
+RUN pip install -i https://test.pypi.org/simple/ pyplastimatch==0.4
 RUN python3 -c 'from pyplastimatch.utils.install import install_precompiled_binaries; install_precompiled_binaries()'
 
 ENTRYPOINT ["plastimatch"]
