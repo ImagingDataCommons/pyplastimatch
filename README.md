@@ -105,7 +105,7 @@ To build the Ubuntu 22.04 LTS Platimatch Docker container, run the following com
 ```
 cd dockerfiles/
 
-docker build --tag pypla_22.04 .
+docker build --tag pypla_22.04 . --no-cache
 ```
 
 ## Run the Docker Container
