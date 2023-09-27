@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "pyplastimatch"
 version = "0.1"
 authors = [
-  { name="Dennis Bontempi", email="dennis_bontempi@dfci.harvard.edu" },
+  { name="Dennis Bontempi", email="dbontempi@bwh.harvard.edu" },
 ]
 description = "Basic Python wrapper for Plastimatch"
 readme = "README.md"

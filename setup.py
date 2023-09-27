@@ -8,4 +8,4 @@ setup(name="pyplastimatch",
       license="GNU General Public License, Version 3.0",
       packages=["pyplastimatch", "pyplastimatch.utils"],
       install_requires=["numpy", "scikit-image>=0.14",
-			"SimpleITK", "pydicom", "pandas", "matplotlib"])
+			"SimpleITK", "pydicom", "pandas", "matplotlib", "requests"])
