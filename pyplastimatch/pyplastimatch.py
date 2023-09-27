@@ -7,7 +7,7 @@
     
     ----------------------------------------
     Author: Dennis Bontempi
-    Email:  dennis_bontempi@dfci.harvard.edu
+    Email:  dbontempi@bwh.harvard.edu
     ----------------------------------------
     
 """
@@ -22,7 +22,6 @@ import subprocess
 # define classes/something more fancy (for parsing etc.)?
 # Otherwise we may very well just have a function called "run_plastimatch_command"
 # and pass it also the command we want to run (convert, resample, etc.)
-
 
 def convert(verbose = True, path_to_log_file = None, return_bash_command = False, **kwargs):
   """
