@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --no-cache-dir numpy SimpleITK pandas requests
+RUN pip3 install --no-cache-dir numpy SimpleITK pandas requests itk
 
 RUN pip install git+https://github.com/AIM-Harvard/pyplastimatch.git@bin
 RUN python3 -c 'from pyplastimatch.utils.install import install_compiled_binaries; install_compiled_binaries()'
