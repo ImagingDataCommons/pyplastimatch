@@ -86,13 +86,11 @@ Some functions might be based on the [DICOM for Quantitative Imaging (dcmqi) lib
 
 # Usage Example
 
-Since Plastimatch and this wrapper are being used for the development of AI-base medical image analysis pipelines on the [NIH CRDC Imaging Data Commons](https://datacommons.cancer.gov/repository/imaging-data-commons) plaftorm, some examples on how to use PyPlastimatch can be found at the [IDC-Examples/notebooks](https://github.com/ImagingDataCommons/IDC-Examples/tree/master/notebooks) repository. 
+You can try PyPlastimatch on Google Colab without installing anything. To open the Colab notebook, click here: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AIM-Harvard/pyplastimatch/blob/main/notebooks/pyplastimatch_MWE.ipynb) 
 
-For instance, the "Cohort Preparation" Colab notebook contains a simple tutorial on how to get a cohort ready for any image processing applications (e.g., best practices for the conversion from DICOM to NRRD and NIfTI, pointers to pre-processing utilities).
+Since Plastimatch and this wrapper are being used for the development of AI-base medical image analysis pipelines on the [NIH CRDC Imaging Data Commons](https://datacommons.cancer.gov/repository/imaging-data-commons) platform, some example notebooks using PyPlastimatch can be found at the [IDC-Examples/notebooks](https://github.com/ImagingDataCommons/IDC-Examples/tree/master/notebooks) repository as well.
 
-To open the Colab notebook, click here:  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ImagingDataCommons/IDC-Examples/blob/master/notebooks/cohort_preparation.ipynb) 
-
-Note: provided you have a Google Cloud Platform project correctly setup, you will be able to run this and all the other notebooks for free, completely on the cloud.
+Note: provided you have a Google Cloud Platform project correctly set up, you will be able to run this and all the other notebooks for free, entirely on the cloud. Should you find any issues with the notebooks or would like to learn more, you can get in touch here, on the IDC repositories, or the [IDC forum](https://discourse.canceridc.dev/).
 
 # Ubuntu 22.04 LTS Plastimatch Docker Container
 
