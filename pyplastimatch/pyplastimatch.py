@@ -15,6 +15,7 @@
 import os
 import json
 import subprocess
+from typing import Dict
 
 ## ----------------------------------------
 
@@ -222,5 +223,62 @@ def hd(path_to_reference_img, path_to_test_img, verbose = True):
   hausdorff_summary_dict["hd95_boundaries"] = float(str(hausdorff_summary[-1]).split("=")[-1][:-1])
   
   return hausdorff_summary_dict
+
+## ----------------------------------------
+
+def compare(path_to_reference_img, path_to_test_img, verbose = True) -> Dict[str, float]:
+  """
+  The compare command compares two files by subtracting one file from the other, and reporting statistics of the difference image. 
+  The two input files must have the same geometry (origin, dimensions, and voxel spacing). The command line usage is given as follows:
+  
+  For additional details, see:
+  https://plastimatch.org/plastimatch.html#plastimatch-compare
+  
+  Args:
+      path_to_reference_img:
+      path_to_test_img:
+      
+  Returns:
+      dictionary:
+        MIN      Minimum value of difference image
+        AVE      Average value of difference image
+        MAX      Maximum value of difference image
+        MAE      Mean average value of difference image
+        MSE      Mean squared difference between images
+        DIF      Number of pixels with different intensities
+        NUM      Total number of voxels in the difference image
+     
+  """
+  
+  # print
+  if verbose: 
+    print("\n Comparing two images with 'plastimatch compare'")
+
+  # build command
+  bash_command = []
+  bash_command += ["plastimatch", "compare"]
+  bash_command += [path_to_reference_img, path_to_test_img]
+  
+  # run command
+  dice_summary = subprocess.run(bash_command, capture_output = True, check = True)
+  
+  # print
+  if verbose: 
+    print("... Done.")
+
+  # combine output
+  comparison_raw = dice_summary.stdout.decode('utf-8')
+
+  # flaten output
+  comparison_flat = " ".join(comparison_raw.splitlines()).split()
+  assert len(comparison_flat) == 14, "Unfamiliar output."
+  
+  # parse output into dictionary
+  comparison_dict = {}
+  for i in range(0, len(comparison_flat), 2):
+    comparison_dict[comparison_flat[i]] = float(comparison_flat[i+1])
+    
+  # return dictionary
+  return comparison_dict
 
 ## ----------------------------------------
