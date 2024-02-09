@@ -4,7 +4,7 @@ setup(
   name="pyplastimatch",
   version="0.4.4",
   description="Basic Python wrapper for Plastimatch",
-  url="https://github.com/AIM-Harvard/pyplastimatch",
+  url="https://github.com/ImagingDataCommons/pyplastimatch",
   author="Dennis Bontempi",
   license=" BSD-3-Clause license",
   packages=[
