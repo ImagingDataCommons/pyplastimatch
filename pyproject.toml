@@ -22,6 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: POSIX :: Linux",
 ]
+dynamic = [
+  "dependencies"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/ImagingDataCommons/pyplastimatch"
