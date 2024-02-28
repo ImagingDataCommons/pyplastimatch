@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
   name="pyplastimatch",
-  version="0.4.4",
+  version="0.4.5",
   description="Basic Python wrapper for Plastimatch",
   url="https://github.com/ImagingDataCommons/pyplastimatch",
   author="Dennis Bontempi",
@@ -10,15 +10,15 @@ setup(
   packages=[
     "pyplastimatch",
     "pyplastimatch.utils"
-    ],
+  ],
   install_requires=[
-        "itk",
-        "matplotlib",
-        "numpy",
-        "pandas",
-        "pydicom",
-        "requests",
-        "scikit-image",
-        "SimpleITK"
-        ]
-        )
+    "itk",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "pydicom",
+    "requests",
+    "scikit-image",
+    "SimpleITK"
+  ]
+)
