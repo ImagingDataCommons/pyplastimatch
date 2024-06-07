@@ -160,21 +160,21 @@ def dice(path_to_reference_img, path_to_test_img, verbose = True):
     
     # FIXME: return exception?
     print(e)
-  
-  dice_summary = dice_summary.stdout.splitlines()
+     
+  dice_summary = dice_summary.stdout.decode().splitlines()
   
   dice_summary_dict = dict()
   dice_summary_dict["com"] = dict()
 
-  dice_summary_dict["com"]["ref"] = [float(str(dice_summary[1]).split("\\t")[1]),
-                                     float(str(dice_summary[1]).split("\\t")[2]),
-                                     float(str(dice_summary[1]).split("\\t")[3][:-2])]
+  dice_summary_dict["com"]["ref"] = [float(dice_summary[1].split("\t")[1]),
+                                     float(dice_summary[1].split("\t")[2]),
+                                     float(dice_summary[1].split("\t")[3])]
 
-  dice_summary_dict["com"]["cmp"] = [float(str(dice_summary[2]).split("\\t")[1]),
-                                     float(str(dice_summary[2]).split("\\t")[2]),
-                                     float(str(dice_summary[2]).split("\\t")[3][:-2])]
+  dice_summary_dict["com"]["cmp"] = [float(dice_summary[2].split("\t")[1]),
+                                     float(dice_summary[2].split("\t")[2]),
+                                     float(dice_summary[2].split("\t")[3])]
 
-  dice_summary_dict["dc"] = float(str(dice_summary[7]).split(":")[-1][:-1])
+  dice_summary_dict["dc"] = float(dice_summary[7].split(":")[1])
   
   return dice_summary_dict
   
@@ -212,15 +212,15 @@ def hd(path_to_reference_img, path_to_test_img, verbose = True):
     # FIXME: return exception?
     print(e)
   
-  hausdorff_summary = hausdorff_summary.stdout.splitlines()
+  hausdorff_summary = hausdorff_summary.stdout.decode().splitlines()
   
   hausdorff_summary_dict = dict()
 
-  hausdorff_summary_dict["hd"] = float(str(hausdorff_summary[0]).split("=")[-1][:-1])
-  hausdorff_summary_dict["hd95"] = float(str(hausdorff_summary[3]).split("=")[-1][:-1])
+  hausdorff_summary_dict["hd"] = float(hausdorff_summary[0].split("=")[-1])
+  hausdorff_summary_dict["hd95"] = float(hausdorff_summary[3].split("=")[-1])
   
-  hausdorff_summary_dict["hd_boundaries"] = float(str(hausdorff_summary[4]).split("=")[-1][:-1])
-  hausdorff_summary_dict["hd95_boundaries"] = float(str(hausdorff_summary[-1]).split("=")[-1][:-1])
+  hausdorff_summary_dict["hd_boundaries"] = float(hausdorff_summary[4].split("=")[-1])
+  hausdorff_summary_dict["hd95_boundaries"] = float(hausdorff_summary[-1].split("=")[-1])
   
   return hausdorff_summary_dict
 
