@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
   name="pyplastimatch",
-  version="0.4.5",
+  version="0.4.6",
   description="Basic Python wrapper for Plastimatch",
   url="https://github.com/ImagingDataCommons/pyplastimatch",
   author="Dennis Bontempi",
