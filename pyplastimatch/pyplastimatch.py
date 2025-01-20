@@ -16,6 +16,7 @@ import os
 import json
 import subprocess
 from typing import Dict
+from pathlib import Path
 
 ## ----------------------------------------
 
@@ -282,3 +283,19 @@ def compare(path_to_reference_img, path_to_test_img, verbose = True) -> Dict[str
   return comparison_dict
 
 ## ----------------------------------------
+
+def register(
+  pth_fixed: Path | str, 
+  pth_moving: Path | str,
+  pth_fixed_roi: Path | str = None,
+  pth_moving_roi: Path | str = None,
+  fixed_landmarks: Path | str = None,
+  moving_landmarks: Path | str = None,
+  warped_landmarks: Path | str = None,
+  xform_in
+  verbose = True,
+  ) -> Dict[str, float]:
+  """
+  Purpose:
+      To register two images using the plastimatch register command.
+  """

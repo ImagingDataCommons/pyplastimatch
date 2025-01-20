@@ -1,4 +1,4 @@
-from ubuntu:22.04
+FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -15,8 +15,14 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pyplastimatch
-RUN python3 -c 'from pyplastimatch.utils.install import install_precompiled_binaries; install_precompiled_binaries()'
+RUN apt-get install -y g++ make git cmake-curses-gui \
+    libblas-dev liblapack-dev libsqlite3-dev \
+    libdcmtk-dev libdlib-dev libfftw3-dev \
+    libinsighttoolkit5-dev \
+    libpng-dev libtiff-dev uuid-dev zlib1g-dev
+# RUN apt-get install pipx
+RUN pip3 install --break-system-packages pyplastimatch
+# RUN python3 -c 'from pyplastimatch.utils.install import install_precompiled_binaries; install_precompiled_binaries()'
 
-ENTRYPOINT ["plastimatch"]
+# ENTRYPOINT ["plastimatch"]
 
