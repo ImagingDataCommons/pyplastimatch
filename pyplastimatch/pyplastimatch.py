@@ -292,10 +292,25 @@ def register(
   fixed_landmarks: Path | str = None,
   moving_landmarks: Path | str = None,
   warped_landmarks: Path | str = None,
-  xform_in
+  xform_in: str = None,
+  xform_out: str = None,
+  vf_out: str = None,
+  img_out: Path | str = None,
+  img_out_fmt: str = "auto",
+  img_out_type: str = "auto",
+  resample_when_linear: bool = True,
+  logfile: Path | str = None,
   verbose = True,
   ) -> Dict[str, float]:
   """
   Purpose:
       To register two images using the plastimatch register command.
   """
+  
+  
+  def test(a , b, **kwargs):
+    print(a, b)
+    myj = load_defaulat_json()
+    for key, val in kwargs.items():
+      if  
+      myj[key] = val

@@ -12,11 +12,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-setuptools \
     python3-wheel \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+    wget
 
-RUN apt-get install -y g++ make git cmake-curses-gui \
-    libblas-dev liblapack-dev libsqlite3-dev \
+RUN apt-get install -y g++ make git \
     libdcmtk-dev libdlib-dev libfftw3-dev \
     libinsighttoolkit5-dev \
     libpng-dev libtiff-dev uuid-dev zlib1g-dev

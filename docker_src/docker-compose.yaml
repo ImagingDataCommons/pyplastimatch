@@ -2,7 +2,7 @@ services:
   PyPlastimatch:
     build:
       context: ../
-      dockerfile: dockerfiles/Dockerfile
+      dockerfile: docker_src/Dockerfile
     image: pyplastimatch:latest
     container_name: PyPlastimatch
     stdin_open: true # docker run -i
