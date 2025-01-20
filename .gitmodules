@@ -1,0 +1,3 @@
+[submodule "plastimatch"]
+	path = plastimatch
+	url = https://gitlab.com/plastimatch/plastimatch.git
