@@ -8,7 +8,7 @@ def test_register():
     global_params = {
         "fixed" : f"{pth_static}",
         "moving" : f"{pth_moving}",
-        "img_out" : f"{pth_output}",
+        "image_out" : f"{pth_output}",
     }
     
     stage_params_list = [
@@ -16,7 +16,7 @@ def test_register():
             "xform": "bspline"
         }
     ]
-    register(global_params, stage_params)
+    register(global_params, stage_params_list)
 
 if __name__ == "__main__":
     test_register()

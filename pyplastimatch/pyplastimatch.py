@@ -344,7 +344,7 @@ def register(
     "moving_roi", "fixed_landmarks",
     "moving_landmarks","warped_landmarks",
     "xform_in", "xform_out", "vf_out",
-    "img_out", "img_out_fmt", "img_out_type",
+    "image_out", "img_out_fmt", "img_out_type",
     "resample_when_linear", "logfile"
   ]
   final_global_params = defaultdict(str)
@@ -366,7 +366,7 @@ def register(
   # and create the command
   stage_param_possible_key_list = [
   "fixed_landmarks", "moving_landmarks", "warped_landmarks", "xform_out",
-  "vf_out", "img_out", "img_out_fmt", "img_out_type",
+  "xform", "vf_out", "img_out", "img_out_fmt", "img_out_type",
   "resample_when_linear", "background_max", "convergence_tol", "default_value", 
   "demons_acceleration", "demons_filter_width", "demons_homogenization", "demons_std", 
   "demons_gradient_type", "demons_smooth_update_field", "demons_std_update_field",
@@ -393,6 +393,7 @@ def register(
 
   # create the parm.txt file in the same directory as image_out
   out_dir = Path(final_global_params["image_out"]).parent
+  os.makedirs(out_dir, exist_ok=True)
   parm_txt_path = out_dir.joinpath("parm.txt")
   param_txt = "[Global]\n"
   for key in final_global_params:
