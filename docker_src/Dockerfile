@@ -1,17 +1,11 @@
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    git \
-    libboost-all-dev \
-    libssl-dev \
-    libzmq3-dev \
-    pkg-config \
-    python3 \
-    python3-pip \
-    python3-setuptools \
-    python3-wheel \
+    build-essential cmake git \
+    libboost-all-dev libssl-dev \
+    libzmq3-dev pkg-config \
+    python3 python3-pip \
+    python3-setuptools python3-wheel \
     wget libdcmtk-dev libdlib-dev libfftw3-dev \
     libinsighttoolkit5-dev \
     libpng-dev libtiff-dev uuid-dev zlib1g-dev \
