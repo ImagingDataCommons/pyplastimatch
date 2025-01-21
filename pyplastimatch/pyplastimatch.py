@@ -352,7 +352,7 @@ def register(
   for key in global_params:
     if key in global_param_possible_key_list:
       final_global_params[key] = global_params[key]
-  
+
   # make sure the required global parameters are present
   if "fixed" not in final_global_params:
     raise ValueError("The fixed image is required.")
@@ -394,4 +394,21 @@ def register(
   # create the parm.txt file in the same directory as image_out
   out_dir = Path(final_global_params["image_out"]).parent
   parm_txt_path = out_dir.joinpath("parm.txt")
+  param_txt = "[Global]\n"
+  for key in final_global_params:
+    param_txt += f"{key}={final_global_params[key]}\n"
+  param_txt += "\n"
+  for stage in final_stage_params_list:
+    param_txt += "[Stage]\n"
+    for key in stage:
+      param_txt += f"{key}={stage[key]}\n"
+    param_txt += "\n"
+
+  with open(parm_txt_path, "w") as f:
+    f.write(param_txt)
   
+  command = ["plastimatch", "register", str(parm_txt_path)]
+  try:
+    registration_summary = subprocess.run(command, capture_output = True, check = True)
+  except Exception as e:
+    print(e)
