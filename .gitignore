@@ -1,6 +1,7 @@
 data_test/*
 !data_test/.gitkeep
-
+temp_data/*
+!temp_data/.gitkeep
 plastimatch-ubuntu_24_04
 # Byte-compiled / optimized / DLL files
 __pycache__/
