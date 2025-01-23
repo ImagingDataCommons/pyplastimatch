@@ -44,6 +44,9 @@ def register_api(
     Purpose:
         - To run image registration using pyplastimatch.
     """
+    print(f"static image: {all_inputs.global_params['fixed']}")
+    print(f"moving image: {all_inputs.global_params['moving']}")
+    print(f"output image: {all_inputs.global_params['image_out']}")
     register(all_inputs.global_params, all_inputs.stage_params_list)
 
 
