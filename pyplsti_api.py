@@ -33,6 +33,7 @@ class Inputs_register(BaseModel):
         self.global_params["fixed"] = dir_temp_data.joinpath(self.global_params.get("fixed"))
         self.global_params["moving"] = dir_temp_data.joinpath(self.global_params.get("moving"))
         self.global_params["image_out"] = dir_temp_data.joinpath(self.global_params.get("image_out"))
+        self.global_params["vf_out"] = dir_temp_data.joinpath(self.global_params.get("vf_out"))
 
 app = FastAPI()
 
@@ -47,8 +48,8 @@ def register_api(
     print(f"static image: {all_inputs.global_params['fixed']}")
     print(f"moving image: {all_inputs.global_params['moving']}")
     print(f"output image: {all_inputs.global_params['image_out']}")
+    print(f"output vf: {all_inputs.global_params['vf_out']}")
     register(all_inputs.global_params, all_inputs.stage_params_list)
-
 
 def test_register_api():
     pth_static = "static.nrrd"
