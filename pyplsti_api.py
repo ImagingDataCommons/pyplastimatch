@@ -66,8 +66,6 @@ class Inputs_convert(BaseModel):
     """
     pth_input: Path | str = None
     pth_output: Path | str = None
-    options: Dict[str, str] = None
-
     # these attributes will be filled from the options
     xf: Path | str = None
 
@@ -78,17 +76,8 @@ class Inputs_convert(BaseModel):
                 if "temp_data/" in value:
                     value = value.split("temp_data/")[-1]
                 value = dir_temp_data.joinpath(value)
-            if key == "options":
-                for key_opt, value_opt in value.items():
-                    if "temp_data/" in value_opt:
-                        value_opt = value_opt.split("temp_data/")[-1]
-                    value[key_opt] = dir_temp_data.joinpath(value_opt)
             data[key] = value
-
-        super().__init__()
-        self.pth_input = data.get("pth_input")
-        self.pth_output = data.get("pth_output")
-        self.xf = data.get("options").get("xf")
+        super().__init__(**data)
 
 @app.post("/plastimatch_convert")
 def convert_api(
@@ -131,10 +120,8 @@ def test_register_api():
 def test_convert_api():
     pth_input = "../temp_data/moving.nrrd"
     pth_output = "../temp_data/warped.nrrd"
-    options = {
-        "xf": "vf.nrrd"
-    }
-    inputs = Inputs_convert(pth_input=pth_input, pth_output=pth_output, options=options)
+    xf = "../temp_data/vf.nrrd"
+    inputs = Inputs_convert(pth_input=pth_input, pth_output=pth_output, xf=xf)
     convert_api(inputs)
 
 if __name__ == "__main__":
