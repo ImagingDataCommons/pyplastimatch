@@ -45,8 +45,10 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
   bash_command += ["plastimatch", "convert"]
   
   for key, val in kwargs.items():
+    if "_" in key:
+      key = key.replace("_", "-")
     bash_command += ["--%s"%(key), val]
-  
+
   if verbose:
     print("\nRunning 'plastimatch convert' with the specified arguments:")
     for key, val in kwargs.items():
