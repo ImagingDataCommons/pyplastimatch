@@ -15,8 +15,9 @@
 import os
 import json
 import subprocess
-from typing import Dict
-
+from typing import Dict, List
+from pathlib import Path
+from collections import defaultdict
 ## ----------------------------------------
 
 # FIXME: like this, every command is basically the same function with a line changed
@@ -44,8 +45,10 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
   bash_command += ["plastimatch", "convert"]
   
   for key, val in kwargs.items():
+    if "_" in key:
+      key = key.replace("_", "-")
     bash_command += ["--%s"%(key), val]
-  
+
   if verbose:
     print("\nRunning 'plastimatch convert' with the specified arguments:")
     for key, val in kwargs.items():
@@ -282,3 +285,133 @@ def compare(path_to_reference_img, path_to_test_img, verbose = True) -> Dict[str
   return comparison_dict
 
 ## ----------------------------------------
+
+def register(
+  global_params: Dict[str, str],
+  stage_params_list: List[Dict[str, str]]
+  ) -> Dict[str, float]:
+  """
+  Purpose:
+    - To register two images using the plastimatch register command. The input to the command is a 
+    text file called parm.txt. This text file has [Global] commands and [Stage] commands.
+    While the variables for the global commands stay the same throughout many stages of the registration,
+    the stage commands can be different for each stage. For the full list of these variables
+    look at https://plastimatch.org/registration_command_file_reference.html.
+    Here is an example of the parm.txt file:
+      [GLOBAL]
+      fixed=t5.mha
+      moving=t0.mha
+      image_out=warped.mha
+      vf_out=deformation.nrrd
+
+      [STAGE]
+      xform=bspline
+      grid_spac=50 50 50
+
+      [STAGE]
+      grid_spac=20 20 20
+
+  Inputs:
+    - global_params: dict := a dictionary containing the global parameters for the registration.
+    The possible global parameters are:
+      - fixed: str := the path to the fixed image.
+      - moving: str := the path to the moving image.
+      - fixed_roi: str := the path to the fixed region of interest.
+      - moving_roi: str := the path to the moving region of interest.
+      - fixed_landmarks: str := the path to the fixed landmarks.
+      - moving_landmarks: str := the path to the moving landmarks.
+      - warped_landmarks: str := the path to the warped landmarks.
+      - xform_in: str := the path to the input transformation.
+      - xform_out: str := the path to the output transformation.
+      - vf_out: str := the path to the output vector field.
+      - img_out: str := the path to the output image.
+      - img_out_fmt: str := the format of the output image.
+      - img_out_type: str := the type of the output image.
+      - resample_when_linear: bool := whether to resample when linear.
+      - logfile: str := the path to the log file.
+    - stage_params_list: List[Dict[str, str]] := a list of dictionaries containing the stage parameters for the registration.
+    please look at the plastimatch documentation for the full list of possible stage parameters.
+  Outputs:
+    - registration_summary: Dict[str, float] := a dictionary containing the registration summary.
+    The possible keys are:
+      - pth_registered_data: str := the path to the registered data.
+      - log_file: str := the path to the log file.
+  """
+  
+  # here are the possible global parameters for the registration
+  # some are optional, some are mandatory, we loop through them 
+  # and create the command
+  global_param_possible_key_list = [
+    "fixed", "moving", "fixed_roi",
+    "moving_roi", "fixed_landmarks",
+    "moving_landmarks","warped_landmarks",
+    "xform_in", "xform_out", "vf_out",
+    "image_out", "img_out_fmt", "img_out_type",
+    "resample_when_linear", "logfile"
+  ]
+  final_global_params = defaultdict(str)
+  # loop through the global parameters and create the command
+  for key in global_params:
+    if key in global_param_possible_key_list:
+      final_global_params[key] = global_params[key]
+
+  # make sure the required global parameters are present
+  if "fixed" not in final_global_params:
+    raise ValueError("The fixed image is required.")
+  if "moving" not in final_global_params:
+    raise ValueError("The moving image is required.")
+  if "image_out" not in final_global_params:
+    raise ValueError("The output image is required.")
+  
+  # here are the possible stage parameters for the registration
+  # some are optional, some are mandatory, we loop through them
+  # and create the command
+  stage_param_possible_key_list = [
+  "fixed_landmarks", "moving_landmarks", "warped_landmarks", "xform_out",
+  "xform", "vf_out", "img_out", "img_out_fmt", "img_out_type",
+  "resample_when_linear", "background_max", "convergence_tol", "default_value", 
+  "demons_acceleration", "demons_filter_width", "demons_homogenization", "demons_std", 
+  "demons_gradient_type", "demons_smooth_update_field", "demons_std_update_field",
+  "demons_smooth_deformation_field", "demons_std_deformation_field", "demons_step_length",
+  "grad_tol", "grid_spac", "gridsearch_min_overlap", "histoeq", "landmark_stiffness",
+  "lbfgsb_mmax", "mattes_fixed_minVal", "mattes_fixed_maxVal", "mattes_moving_minVal",
+  "mattes_moving_maxVal", "max_its", "max_step", "metric", "mi_histogram_bins", "min_its",
+  "min_step", "num_hist_levels_equal", "num_matching_points", "num_samples", "num_samples_pct",
+  "num_substages", "optim_subtype", "pgtol", "regularization", "diffusion_penalty", 
+  "curvature_penalty", "linear_elastic_multiplier", "third_order_penalty", 
+  "total_displacement_penalty", "lame_coefficient_1", "lame_coefficient_2", "res",
+  "res_mm", "res_mm_fixed", "res_mm_moving", "res_vox", "res_vox_fixed",
+  "res_vox_moving", "rsg_grad_tol", "ss", "ss_fixed", "ss_moving",
+  "threading", "thresh_mean_intensity", "translation_scale_factor",
+  ]
+  # loop through the stage parameters and create the command for each stage
+  final_stage_params_list = []
+  for stage_params in stage_params_list:
+    final_stage_params = defaultdict(str)
+    for key in stage_params:
+      if key in stage_param_possible_key_list:
+        final_stage_params[key] = stage_params[key]
+    final_stage_params_list.append(final_stage_params) 
+
+  # create the parm.txt file in the same directory as image_out
+  out_dir = Path(final_global_params["image_out"]).parent
+  os.makedirs(out_dir, exist_ok=True)
+  parm_txt_path = out_dir.joinpath("parm.txt")
+  param_txt = "[Global]\n"
+  for key in final_global_params:
+    param_txt += f"{key}={final_global_params[key]}\n"
+  param_txt += "\n"
+  for stage in final_stage_params_list:
+    param_txt += "[Stage]\n"
+    for key in stage:
+      param_txt += f"{key}={stage[key]}\n"
+    param_txt += "\n"
+
+  with open(parm_txt_path, "w") as f:
+    f.write(param_txt)
+  
+  command = ["plastimatch", "register", str(parm_txt_path)]
+  try:
+    registration_summary = subprocess.run(command, capture_output = True, check = True)
+  except Exception as e:
+    print(e)

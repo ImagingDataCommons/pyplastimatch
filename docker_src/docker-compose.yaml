@@ -1,0 +1,15 @@
+services:
+  PyPlastimatch:
+    build:
+      context: ../
+      dockerfile: docker_src/Dockerfile
+    image: pyplastimatch:latest
+    container_name: PyPlastimatch
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    environment:
+      - HOST_HOME=${HOST_HOME}
+      - DEBIAN_FRONTEND=noninteractive
+    volumes:
+      - ../:/root/Software/pyplastimatch
+      - ${HOST_HOME}:/root/YourLocalHome

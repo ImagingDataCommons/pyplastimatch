@@ -94,14 +94,14 @@ Note: provided you have a Google Cloud Platform project correctly set up, you wi
 
 # Ubuntu 22.04 LTS Plastimatch Docker Container
 
-If you want to test Plastimatch for Ubuntu 22.04 LTS, you can use the Docker image we shared for this purpose under `dockerfiles`.
+If you want to test Plastimatch for Ubuntu 22.04 LTS, you can use the Docker image we shared for this purpose under `docker_src`.
 
 ## Build the Docker Container
 
 To build the Ubuntu 22.04 LTS Platimatch Docker container, run the following commands from the root of the PyPlastimatch repository:
 
 ```
-cd dockerfiles/
+cd docker_src/
 
 docker build --tag pypla_22.04 . --no-cache
 ```
