@@ -62,6 +62,7 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
                                           stdout = log_file, stderr = log_file,
                                           check = True)
     else:
+      # if no log file is specified, output to the default stdout and stderr
       bash_exit_status = subprocess.run(bash_command, capture_output = True, check = True)
       
     if verbose: print("... Done.")
