@@ -37,7 +37,8 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
       return_bash_command: return the executed command together with the exit status
       
       **kwargs: all the arguments parsable by 'plastimatch convert'
-      
+        Special Cases:
+            - metadata (list): If provided as a list, each item is passed as a separate `--metadata` argument.
   """
 
   bash_command = list()
