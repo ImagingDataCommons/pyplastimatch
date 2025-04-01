@@ -37,19 +37,24 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
       return_bash_command: return the executed command together with the exit status
       
       **kwargs: all the arguments parsable by 'plastimatch convert'
-      
+        Special Cases:
+            - metadata (list): If provided as a list, each item is passed as a separate `--metadata` argument.
   """
 
   bash_command = list()
   bash_command += ["plastimatch", "convert"]
   
   for key, val in kwargs.items():
-    bash_command += ["--%s"%(key), val]
+      if key == "metadata" and isinstance(val, list):
+          for meta in val:
+              bash_command += ["--metadata", str(meta)]
+      else:
+          bash_command += [f"--{key}", str(val)]
   
   if verbose:
     print("\nRunning 'plastimatch convert' with the specified arguments:")
-    for key, val in kwargs.items():
-      print("  --%s"%(key), val)
+    for arg in bash_command[2:]:
+        print(f"  {arg}")
   
   try:
     if path_to_log_file:
