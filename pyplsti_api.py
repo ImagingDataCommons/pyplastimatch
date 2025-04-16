@@ -33,8 +33,8 @@ class Inputs_register(BaseModel):
         super().__init__(**data)
         dir_temp_data = Path(__file__).parent.joinpath("temp_data")
         for key, value in self.global_params.items():
-            if "temp_data/" in value:
-                value = value.split("temp_data/")[-1]
+            if "temp_data/registration/" in value:
+                value = value.split("temp_data/registration/")[-1]
             value = dir_temp_data.joinpath(value)
             self.global_params[key] = value
 
@@ -73,8 +73,8 @@ class Inputs_convert(BaseModel):
         dir_temp_data = Path(__file__).parent.joinpath("temp_data")
         for key, value in data.items():
             if isinstance(value, str):
-                if "temp_data/" in value:
-                    value = value.split("temp_data/")[-1]
+                if "temp_data/registration/" in value:
+                    value = value.split("temp_data/registration/")[-1]
                 value = dir_temp_data.joinpath(value)
             data[key] = value
         super().__init__(**data)
