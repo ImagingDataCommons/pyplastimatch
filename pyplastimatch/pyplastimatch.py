@@ -377,7 +377,7 @@ def register(
   "lbfgsb_mmax", "mattes_fixed_minVal", "mattes_fixed_maxVal", "mattes_moving_minVal",
   "mattes_moving_maxVal", "max_its", "max_step", "metric", "mi_histogram_bins", "min_its",
   "min_step", "num_hist_levels_equal", "num_matching_points", "num_samples", "num_samples_pct",
-  "num_substages", "optim_subtype", "pgtol", "regularization", "diffusion_penalty", 
+  "num_substages","optim", "optim_subtype", "pgtol", "regularization", "diffusion_penalty", 
   "curvature_penalty", "linear_elastic_multiplier", "third_order_penalty", 
   "total_displacement_penalty", "lame_coefficient_1", "lame_coefficient_2", "res",
   "res_mm", "res_mm_fixed", "res_mm_moving", "res_vox", "res_vox_fixed",
