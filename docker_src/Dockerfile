@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install -y \
     wget libdcmtk-dev libdlib-dev libfftw3-dev \
     libinsighttoolkit5-dev \
     libpng-dev libtiff-dev uuid-dev zlib1g-dev \
-    plastimatch && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    plastimatch
+#    apt-get clean && \
+ #   rm -rf /var/lib/apt/lists/*
 
 # RUN apt-get install pipx
 RUN pip3 install --break-system-packages pyplastimatch
