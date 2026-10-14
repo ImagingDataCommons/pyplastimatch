@@ -73,8 +73,8 @@ def convert(verbose = True, path_to_log_file = None, return_bash_command = False
     # attributes of that exception hold the arguments, the exit code, and stdout and stderr if they were captured
     # For details, see: https://docs.python.org/3/library/subprocess.html#subprocess.run
     
-    # FIXME: return exception?
     print(e)
+    raise
   
   if return_bash_command:
     return bash_command
@@ -125,8 +125,8 @@ def resample(verbose = True, path_to_log_file = None, return_bash_command = Fals
     # attributes of that exception hold the arguments, the exit code, and stdout and stderr if they were captured
     # For details, see: https://docs.python.org/3/library/subprocess.html#subprocess.run
     
-    # FIXME: return exception?
     print(e)
+    raise
   
   if return_bash_command:
     return bash_command
